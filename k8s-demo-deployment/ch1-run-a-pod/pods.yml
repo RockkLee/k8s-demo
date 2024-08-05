@@ -1,0 +1,28 @@
+# Specifies the API version being used
+apiVersion: v1
+
+# Specifies the type of object being created, which is a Pod
+# There are many other types of objects available, such as Services, Deployments, etc.
+kind: Pod
+
+# metadata.name: 
+#   It is used to refer to the object in other Kubernetes API calls.
+#   It must be unique within a namespace.
+# metadata.namespace:
+#   A way to divide cluster resources between multiple namespaces, like C# or C++ does.
+# metadata.labels:
+#   A set of key-value pairs that are used to organize and categorize objects.
+#   Labels can be used to identify objects for grouping or selection purposes.
+metadata:
+  name: k8s-demo-fastapi
+
+# Specification of the desired state of the Pod
+# spec.containers:
+#   List of containers that will run in the Pod, but we usually only have one container in a Pod.
+spec:
+  # List of containers that will run in the Pod
+  containers:
+  - name: k8s-demo-fastapi  # Name of the container
+    # Image to use for the container
+    image: k8s-demo-fastapi  # <username-on-dockerhub>/<image>:<tag>
+    imagePullPolicy: IfNotPresent # Find the image locally first, then pull it from DockerHub if the image is not found

@@ -1,0 +1,36 @@
+# All database yml files can use this to mount a volume
+
+# What do we want
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgresdb-pvc
+spec:
+  # For dynamic persistent volumes, 
+  # the storageClass instance finds and binds PVCs based on storageClassName.
+  # It can also be used for static persistent volumes to bind the PVC and PV.
+  storageClassName: postgresdb # use this to bind the PVC and PV
+  accessModes:
+    - ReadWriteOnce  # can be mounted as read-write by a single node
+  # PV that is bound should have at least this many resources for the PVC
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+
+# How do we want it to be implemented
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgresdb-pv # use this to bind the PVC and PV
+spec:
+  storageClassName: postgresdb
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  # define the dir outside the container, which we want to mount.
+  hostPath:  # use this for local development, and it will save data on the local machine
+    path: "/run/desktop/mnt/host/c/demo-db" # must be an absolute path
+    type: DirectoryOrCreate

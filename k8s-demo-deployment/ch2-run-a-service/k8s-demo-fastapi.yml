@@ -1,0 +1,40 @@
+# Pod definition
+apiVersion: v1
+
+kind: Pod
+
+metadata:
+  name: k8s-demo-fastapi
+  labels:
+    app: k8s-demo-fastapi  # The labels.app should match the selector.app of the Service
+
+spec:
+  containers:
+  - name: k8s-demo-fastapi
+    image: k8s-demo-fastapi
+    imagePullPolicy: IfNotPresent
+
+---
+
+# Service definition
+apiVersion: v1
+
+kind: Service
+
+metadata:
+  name: k8s-demo-fastapi 
+
+spec:
+  # This defines which pods are going to be represented by this Service
+  # The service becomes a network endpoint for either other services
+  # or maybe external users to connect to (eg browser)
+  selector:
+    app: k8s-demo-fastapi  # The selector.app should match the labels.app of the Pod
+
+  ports:
+    - name: http
+      nodePort: 30000
+      port: 8080
+      targetPort: 8080
+  
+  type: NodePort

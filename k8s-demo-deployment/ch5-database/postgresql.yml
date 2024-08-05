@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresdb
+spec:
+  selector:
+    matchLabels:
+      app: postgresdb
+  replicas: 1
+  template: # template for the pods
+    metadata:
+      labels:
+        app: postgresdb
+    spec:
+      containers:
+      - name: postgresdb
+        image: postgres:13
+        volumeMounts:  # list of volumes to mount into the container's filesystem
+          - name: postgresdb-volume
+            # define the dir inside the container that we want to mount outside of the container.
+            mountPath: /var/lib/postgresql/data
+
+        # set postgresdb's environment variables (user, password, etc.)
+        envFrom:
+          - configMapRef:
+              name: postgres-config
+
+      volumes:
+        - name: postgresdb-volume
+          persistentVolumeClaim:
+            # bind the PVC (Persistent Volume Claim) that is defined outside of this yml file
+            claimName: postgresdb-pvc
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: postgresdb
+spec:
+  selector:
+    app: postgresdb
+  ports:
+      - port: 5432
+# Since the standard postgresql port is 5432, 
+# and the range of exposed ports with NodePort type is 30000-32767,
+# we cannot use NodePort type.
+  type: ClusterIP

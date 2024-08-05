@@ -1,0 +1,56 @@
+# Deployment definition
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: k8s-demo-fastapi
+
+spec:
+  # Specify the minimum seconds for which a newly created Pod should be ready without any of its containers crashing, 
+  # for it to be considered available. 
+  # How long to wait for all replicas to be ready.
+  # (If set it too long, old pods and new pods will coexist for a period of time,)
+  # (causing the connection repeatedly switch to old pods and new pods, leading to session inconsistencies.)
+  # minReadySeconds: 30  # set it to 30 to demonstrate how k8s updates pods without downtime
+  
+  # strategy:  # strategy for updating pods
+
+  selector:
+    matchLabels:
+      app: k8s-demo-fastapi
+  
+  replicas: 2
+  
+  template: # template for the pods
+    metadata:
+      name: k8s-demo-fastapi
+      labels:
+        app: k8s-demo-fastapi
+    spec:
+      containers:
+      - name: k8s-demo-fastapi
+        image: k8s-demo-fastapi:1.0.1
+        imagePullPolicy: IfNotPresent
+
+---
+
+# Service definition
+apiVersion: v1
+
+kind: Service
+
+metadata:
+  name: k8s-demo-fastapi
+
+spec:
+  selector:
+    app: k8s-demo-fastapi
+
+  ports:
+    - name: http
+      nodePort: 30000
+      port: 8080
+      targetPort: 8080
+  
+  type: NodePort

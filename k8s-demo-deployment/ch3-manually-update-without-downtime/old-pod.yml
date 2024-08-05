@@ -1,0 +1,16 @@
+# old pod
+apiVersion: v1
+
+kind: Pod
+
+metadata:
+  name: k8s-demo-fastapi-1-0-0 # The name should be unique in the same namespace
+  labels:
+    app: k8s-demo-fastapi  # The labels.app should match the selector.app of the Service
+    release: "1.0.0"  # The labels.release should match the selector.release of the Service
+
+spec:
+  containers:
+  - name: k8s-demo-fastapi
+    image: k8s-demo-fastapi:1.0.0
+    imagePullPolicy: IfNotPresent

@@ -1,0 +1,26 @@
+services:
+  app:
+    image: k8s-demo-fastapi:latest
+    hostname: k8s-demo-fastapi-app
+    ports:
+      - "8080:8080"
+    networks:
+      k8s-demo-net:
+  db:
+    image: postgres:13.2-alpine
+    hostname: k8s-demo-fastapi-db
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      k8s-demo-net:
+networks:
+  k8s-demo-net:
+    name: k8s-demo-net

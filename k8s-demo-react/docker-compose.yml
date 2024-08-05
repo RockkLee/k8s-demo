@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  react-app:
+    image:  k8s-demo-react:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    networks:
+      - k8s-demo-net
+networks:
+  k8s-demo-net:
+    name: k8s-demo-net
+    external: true
