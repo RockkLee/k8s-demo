@@ -1,0 +1,56 @@
+# Deployment definition
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: k8s-demo-fastapi
+
+spec:
+  # strategy:  # strategy for updating pods
+
+  selector:
+    matchLabels:
+      app: k8s-demo-fastapi
+  
+  replicas: 2
+  
+  template: # template for the pods
+    metadata:
+      name: k8s-demo-fastapi
+      labels:
+        app: k8s-demo-fastapi
+    spec:
+      containers:
+      - name: k8s-demo-fastapi
+        image: k8s-demo-fastapi
+        imagePullPolicy: IfNotPresent
+        # need to use os.getenv to get env variables in python
+        envFrom:
+          - configMapRef:
+              name: fastapi-config
+
+
+---
+
+# Service definition
+apiVersion: v1
+
+kind: Service
+
+metadata:
+  # The name should be the same as the name in docker-compose
+  name: k8s-demo-fastapi-app
+
+spec:
+  selector:
+    app: k8s-demo-fastapi
+
+  ports:
+    - name: http
+      # nodePort: 30001
+      port: 8080
+      targetPort: 8080
+  
+  # type: NodePort
+  type: ClusterIP

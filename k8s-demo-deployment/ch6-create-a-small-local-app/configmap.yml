@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+data:
+  POSTGRES_DB: "postgres"
+  POSTGRES_USER: "postgres-production"
+  POSTGRES_PASSWORD: "1234-production"
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fastapi-config
+data:
+  PY_DB_USER: "postgres-production"
+  PY_DB_PASSWORD: "1234-production"
+  PY_DB_IP: "postgresdb"
+
+---
+
+# TODO: set up the frontend config
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: react-config
+data:
+  url-config: | # use this to bind the volumes.key
+    window._env_ = {
+      CONFIGMAP_BACKEND_URL: "http://k8s-demo-fastapi-app",
+    }

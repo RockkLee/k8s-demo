@@ -34,6 +34,11 @@ kubectl exec  <pod-name> -- <command>
 kubectl exec -it <pod-name> -- sh
 ```
 
+- Test DNS
+```bash
+kubectl run -i --tty --rm dns-test --image=busybox --restart=Never -- nslookup <domain-name>
+```
+
 ## Steps for creating a pod and check if it works or not
 - Write a yml file to run a pod
     - `pods.yml`

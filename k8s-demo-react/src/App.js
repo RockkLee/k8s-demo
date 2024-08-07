@@ -7,7 +7,7 @@ function App() {
 
   const handleFetchData = async (inputValue) => {
     try {
-      const data = await fetchPostHeaderData("http://localhost:8080/ping/msg", inputValue);
+      const data = await fetchPostHeaderData("/ping/msg", inputValue);
       setResponse(data);
     } catch (error) {
       console.error("Error fetching data: ", error);
@@ -17,7 +17,7 @@ function App() {
 
   const handleDeleteData = async () => {
     try {
-      const data = await fetchDeleteData("http://localhost:8080/ping/deleteall");
+      const data = await fetchDeleteData("/ping/deleteall");
       setResponse(data);
     } catch (error) {
       console.error("Error fetching data: ", error);
@@ -27,13 +27,24 @@ function App() {
 
   const handleViewData = async () => {
     try {
-      const data = await fetchGetData("http://localhost:8080/ping/getall");
+      const data = await fetchGetData("/ping/getall");
       setResponse(data);
     } catch (error) {
       console.error("Error fetching data: ", error);
       alert("Error fetching data: " + error);
     }
   };
+
+
+  const fetchRootForTesting = async () => {
+    try {
+      const data = await fetchGetData("/");
+      console.log(data);
+    } catch (err) {
+      console.log('Error fetching data:', err);
+    }
+  };
+  fetchRootForTesting();
 
   return (
     <div style={{ padding: '20px' }}>

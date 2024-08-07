@@ -9,7 +9,10 @@ app = FastAPI()
 app.include_router(ping_api.router)
 
 origins = [
-    "http://localhost:3000",
+    # "http://localhost:3000",
+    # "http://k8s-demo-fastapi-app",
+    # "http://k8s-demo-react:*",
+    "*"
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -22,8 +25,8 @@ app.add_middleware(
 
 @app.get("/")
 def root():
-    logger.info("Hello World v1.0.1")
-    return {"message": "Hello World v1.0.1"}
+    logger.info("Hello World")
+    return {"message": "Hello World"}
 
 
 if __name__ == "__main__":

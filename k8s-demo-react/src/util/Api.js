@@ -1,4 +1,6 @@
-const rootUrl = process.env.BACKEND_URL;
+const configmapRootUrl = window._env_.CONFIGMAP_BACKEND_URL;
+const rootUrl = configmapRootUrl ? configmapRootUrl : process.env.REACT_APP_BACKEND_URL;
+
 
 export const fetchPostData = async (url, inputValue) => {
   url = rootUrl + url
@@ -32,6 +34,7 @@ export const fetchPostHeaderData = async (url, inputValue) => {
 
 export const fetchGetData = async (url) => {
   url = rootUrl + url
+  console.log(url)
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error('Network response was not ok');

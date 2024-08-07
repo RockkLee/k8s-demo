@@ -1,0 +1,60 @@
+# Deployment definition
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: k8s-demo-react
+
+spec:
+  # strategy:  # strategy for updating pods
+
+  selector:
+    matchLabels:
+      app: k8s-demo-react
+  
+  replicas: 2
+  
+  template: # template for the pods
+    metadata:
+      name: k8s-demo-react
+      labels:
+        app: k8s-demo-react
+    spec:
+      containers:
+      - name: k8s-demo-react
+        image: k8s-demo-react
+        imagePullPolicy: IfNotPresent
+        volumeMounts: # define the files inside the container that we want to mount outside of the container.
+          - name: configmap-volume # use this to bind volumes
+            mountPath: "/usr/share/nginx/html/configmap.js" # "..../<filename>"
+            subPath: "configmap.js" # filename
+      volumes: # define the dir outside the container, which we want to mount.
+        - name: configmap-volume # use this to bind volumeMounts
+          configMap:
+            name: react-config
+            items:
+                - key: "url-config" # use this to bind the configmap
+                  path: "configmap.js" # filename (file that we want to mount)
+
+
+---
+
+# Service definition
+apiVersion: v1
+
+kind: Service
+
+metadata:
+  name: k8s-demo-react
+
+spec:
+  selector:
+    app: k8s-demo-react
+
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+  
+  type: ClusterIP
