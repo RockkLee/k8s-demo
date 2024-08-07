@@ -18,8 +18,8 @@ def root():
 ```
 
 - Build the two versions of the docker images
-    - `docker build -t  k8s-demo-fastapi:1.0.0 .`
-    - `docker build -t  k8s-demo-fastapi:1.0.1 .`
+    - `docker build -t k8s-demo-fastapi:1.0.0 .`
+    - `docker build -t k8s-demo-fastapi:1.0.1 .`
 
 <br>
 
